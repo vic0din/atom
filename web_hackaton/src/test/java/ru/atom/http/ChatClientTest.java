@@ -4,10 +4,10 @@ import okhttp3.Response;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import ru.atom.http.client.ChatClient;
 
 import java.io.IOException;
 
-@Ignore
 public class ChatClientTest {
     private static String MY_NAME_IN_CHAT = "sasha";
     private static String MY_MESSAGE_TO_CHAT = "Всем привет в этом чатике!";
