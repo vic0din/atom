@@ -1,7 +1,7 @@
 #HSLIDE
 # Java
 lecture 9
-## IO, Serialization
+## IO, Serialization, Reflection
 
 #HSLIDE
 ## Отметьтесь на портале
@@ -20,6 +20,7 @@ Refresh gradle project
 ## Agenda
 1. IO/NIO
 1. Serialization
+1. Reflection
 1. Collections revisited
 1. Exceptions revisited
 
@@ -34,31 +35,30 @@ Refresh gradle project
 
 #HSLIDE
 ##File operations
-Basic file operations ()
-*java.nio.file* contains modern file API  
-> @see nio.NIOFileAPI.java
+*java.nio.file* contains modern API for file read/write  
+> @see test/ru.atom.lecture09.nio.NioFileApi.java
 
 
 #HSLIDE
 ## IO
-[http://docs.oracle.com/javase/tutorial/essential/ru.atom.lecture09.io/](http://docs.oracle.com/javase/tutorial/essential/ru.atom.lecture09.io/)
 API for input and output to
 - files
 - network streams
 - internal memory buffers
 - ...  
-IO API is **blocking**
+IO API is **blocking**  
+[http://docs.oracle.com/javase/tutorial/essential/io/](http://docs.oracle.com/javase/tutorial/essential/io/)
 
 
 #HSLIDE
 ##Byte Streams
 #### InputStream (source -> InputStream)  
 AudioInputStream, ByteArrayInputStream, FileInputStream, FilterInputStream, ObjectInputStream, PipedInputStream, SequenceInputStream, StringBufferInputStream
-#### OutputStream (program -> OutputStream)  
+#### OutputStream (OutputStream -> target)  
 ByteArrayOutputStream, FileOutputStream, FilterOutputStream, PrintStream, ObjectOutputStream, PipedOutputStream
   
 IO API is **blocking**
-> @see System.out / System.err (PrintStream)
+> @see System.out / System.err (PrintStream)  
 > @see ru.atom.lecture09.io.ByteStreams.java
 
 #HSLIDE
@@ -77,12 +77,12 @@ Source -async-> Channel --> Buffer
 Buffer --> Channel -async-> Target  
   
 NIO API is **non-blocking**  
-**details:** [http://tutorials.jenkov.com/java-ru.atom.lecture09.nio/index.html](http://tutorials.jenkov.com/java-ru.atom.lecture09.nio/index.html)
+**details:** [http://tutorials.jenkov.com/java-nio/index.html](http://tutorials.jenkov.com/java-nio/index.html)
 
 #HSLIDE
 ## IO Summary
 Now we can read from and write to any external data sources.  
-For filesystem operations it is preferable to use java.io.Path
+For filesystem operations we use java.io.Path
 
 #HSLIDE
 ## Agenda
@@ -111,7 +111,7 @@ and to load persisted java object (**deserialize**) into java program
    ```
 1. put java object to ObjectOutputStream(OutputStream); that is we can immediately save it into File or send it via network e.t.c.
 1. Deserialize via ObjectInputStream(InputStream);
->@see src/ru.atom.lecture09.serialization.SerializationDeserializationTest.java
+@see src/ru.atom.lecture09.serialization.SerializationDeserializationTest.java
 
 #HSLIDE
 ## Serializable class example
@@ -127,9 +127,11 @@ public class ToSerialize implements Serializable {
 ```
 
 #HSLIDE
-#Serialization is recursive
+## Serialization is recursive
 Serialization is **recursive**  
+  
 that is, every object, referenced from serialized will be serialized.  
+  
 So **everything** in reference hierarchy (if not transient) must be **Serializable**  
 Almost all common library classes are serializable (Strings, Numbers, Collection and Maps implementations)
 
@@ -150,12 +152,12 @@ public interface Externalizable {
 
 #HSLIDE
 #Task
-<img src="lecture08/presentation/assets/img/task.png" alt="exception" style="width: 500px;"/>
+<img src="lecture09/presentation/assets/img/task.png" alt="exception" style="width: 500px;"/>
 
 > @see src/ru.atom.lecture09.serialization
 
 Here we have server that accepts serialized object of type **Packet**  
-Implement ObjectClient and send packet with your name as **payload** to **wtfis.ru:12345**  
+Implement ObjectClient and send you name in serialized Packet to **wtfis.ru:12345**  
 Use **Socket** and **OutputStream** to send serialized **Packet**
 
 
@@ -178,7 +180,7 @@ tcpdump - standard unix tool to for traffic analysis
 ## Agenda
 1. IO/NIO
 1. Serialization
-1. Reflection
+1. **[Reflection]**
 1. Collections revisited
 1. Exceptions revisited
 
@@ -201,11 +203,13 @@ Official tutorial: [https://docs.oracle.com/javase/tutorial/reflect/](https://do
 #HSLIDE
 ##Reflection drawback
 - performance overhead
-reflection is actually fast, but it breaks some optimizations https://shipilev.net/blog/archive/reflection/
-- security restrictions
-every reflective call goes through SecurityManager https://docs.oracle.com/javase/tutorial/essential/environment/security.html
-- exposure of internals reflection breaks abstraction
-**One must use reflection Wisely!**
+reflection is actually fast, but it breaks some optimizations  
+[https://shipilev.net/blog/archive/reflection/](https://shipilev.net/blog/archive/reflection/)
+- security restrictions  
+every reflective call goes through SecurityManager
+[https://docs.oracle.com/javase/tutorial/essential/environment/security.html](https://docs.oracle.com/javase/tutorial/essential/environment/security.html)
+- exposure of internals reflection breaks abstraction  
+**One must use reflection Wisely!**  
 (actually as part of specific design patterns)
 
 #HSLIDE
@@ -213,7 +217,8 @@ every reflective call goes through SecurityManager https://docs.oracle.com/javas
 We can for example **configure application** by choosing interface interface implementation in parameters file
 >￼@see test/ru.atom.lecture09.reflection.configuration
 
-Actually **framework** has it's own harness for configuration (recall **hibernate.cfg.xml**).  
+Actually any **framework** has it's own harness for configuration  
+(recall for example **hibernate.cfg.xml**)  
 It may actually work via reflection inside
 
 #HSLIDE
@@ -248,11 +253,13 @@ It may actually work via reflection inside
 5. что будет с исключением, выкинутым при закрытии ресурса?
 
 #HSLIDE
-## Agenda
-1. IO/NIO
-1. Serialization
-1. Collections revisited
-1. Exceptions revisited
+## Summary
+- **InputStream** and **OutputStream** - basic **bytes** io
+- **Reader** and **Writer** - basic **string** io
+- **Serialization** is standard mechanism to store java object (for example to file)
+- With **Reflection** we can use the information about program structure in runtime
+- One must use **reflection** wisely
+- **Collections** and **Exceptions** - are most popular topics on interviews
 
 #HSLIDE
 **Оставьте обратную связь**
