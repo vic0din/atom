@@ -1,4 +1,4 @@
-package serialization;
+package ru.atom.lecture09.serialization;
 
 import org.junit.Test;
 

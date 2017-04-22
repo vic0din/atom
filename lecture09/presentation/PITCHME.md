@@ -1,6 +1,6 @@
 #HSLIDE
 # Java
-lecture 8
+lecture 9
 ## IO, Serialization
 
 #HSLIDE
@@ -36,12 +36,12 @@ Refresh gradle project
 
 #HSLIDE
 ## IO
-(http://docs.oracle.com/javase/tutorial/essential/io/)[http://docs.oracle.com/javase/tutorial/essential/io/]
+[http://docs.oracle.com/javase/tutorial/essential/ru.atom.lecture09.io/](http://docs.oracle.com/javase/tutorial/essential/ru.atom.lecture09.io/)
 API for input and output to
 - files
 - network streams
 - internal memory buffers
-- ...
+- ...  
 IO API is **blocking**
 
 
@@ -55,29 +55,25 @@ IO API is **blocking**
 
 #HSLIDE
 ##Byte Streams
-### InputStream
-source -> InputStream  
+### InputStream (source -> InputStream)  
 AudioInputStream, ByteArrayInputStream, FileInputStream, FilterInputStream, ObjectInputStream, PipedInputStream, SequenceInputStream, StringBufferInputStream
-### OutputStream
-program -> OutputStream  
+### OutputStream (program -> OutputStream)  
 ByteArrayOutputStream, FileOutputStream, FilterOutputStream, ObjectOutputStream, PipedOutputStream
   
 IO API is **blocking**
-> @see io.ByteStreams.java
+> @see ru.atom.lecture09.io.ByteStreams.java
   
 > @see System.out / System.err (PrintStream)
 
 #HSLIDE
 ##Character streams
-### Reader
-source --> Reader  
+### Reader (source --> Reader)  
 BufferedReader, CharArrayReader, FilterReader, InputStreamReader, PipedReader, StringReader
-### Writer
-Writer --> target  
+### Writer (Writer --> target)  
 BufferedWriter, CharArrayWriter, FilterWriter, OutputStreamWriter, PipedWriter, PrintWriter, StringWriter
-
+  
 IO API is **blocking**
-> @see io.CharacterStreams.java
+> @see ru.atom.lecture09.io.CharacterStreams.java
 
 #HSLIDE
 ## NIO
@@ -85,7 +81,7 @@ Source -async-> Channel --> Buffer
 Buffer --> Channel -async-> Target  
   
 NIO API is **non-blocking**  
-**details:** (http://tutorials.jenkov.com/java-nio/index.html)[http://tutorials.jenkov.com/java-nio/index.html]
+**details:** (http://tutorials.jenkov.com/java-ru.atom.lecture09.nio/index.html)[http://tutorials.jenkov.com/java-ru.atom.lecture09.nio/index.html]
 
 #HSLIDE
 ## sniff tcp traffic with tcpdump

@@ -1,4 +1,4 @@
-package reflection;
+package ru.atom.lecture09.reflection;
 
 import org.junit.Test;
 
@@ -30,8 +30,8 @@ public class ReflectionExamples {
   @Test
   public void changePrivateFinalField() throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchFieldException {
     //Get Class by name
-    ClassWithPrivateFinalField obj = (ClassWithPrivateFinalField) Class.forName("reflection.ClassWithPrivateFinalField")
-        //Instantiate ClassWithPrivateFinalField via reflection
+    ClassWithPrivateFinalField obj = (ClassWithPrivateFinalField) Class.forName("ru.atom.lecture09.reflection.ClassWithPrivateFinalField")
+        //Instantiate ClassWithPrivateFinalField via ru.atom.lecture09.reflection
         .newInstance();
 
     assertNotNull(obj);

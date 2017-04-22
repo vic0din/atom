@@ -1,4 +1,4 @@
-package lecture09.configuration_via_reflection;
+package ru.atom.lecture09.configuration_via_reflection;
 
 /**
  * @author Alpi

@@ -1,4 +1,4 @@
-package serialization;
+package ru.atom.lecture09.serialization;
 
 import java.io.Serializable;
 
@@ -14,7 +14,7 @@ public class SerializableClass implements Serializable {
    */
   private final String field;
   /**
-   * this field will be ignored during serialization and deserialization
+   * this field will be ignored during ru.atom.lecture09.serialization and deserialization
    * via standard Serialization mechanism
    * because it is marked as transient
    */

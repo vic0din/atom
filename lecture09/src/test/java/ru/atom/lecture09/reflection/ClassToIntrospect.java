@@ -1,4 +1,4 @@
-package reflection;
+package ru.atom.lecture09.reflection;
 
 /**
  * @author Alpi

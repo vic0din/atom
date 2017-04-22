@@ -1,4 +1,4 @@
-package nio;
+package ru.atom.lecture09.nio;
 
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class NIOFileAPI {
     @Test
     public void writeFile() throws IOException {
-        List<String> lines = Arrays.asList("The first line by nio Files", "The second line by nio Files");
+        List<String> lines = Arrays.asList("The first line by ru.atom.lecture09.nio Files", "The second line by ru.atom.lecture09.nio Files");
         Path file = Paths.get("src/main/resources/to.txt");
         Files.write(file, lines, Charset.forName("UTF-8"));
     }

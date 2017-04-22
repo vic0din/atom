@@ -1,4 +1,4 @@
-package io;
+package ru.atom.lecture09.io;
 
 import org.junit.Test;
 
