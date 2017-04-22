@@ -2,10 +2,6 @@ package ru.atom.lecture09.serialization_over_network;
 
 import java.io.Serializable;
 
-/**
- * @author Alpi
- * @since 13.11.16
- */
 public class Packet implements Serializable {
     private static final long serialVersionUID = 123123123123L;
 

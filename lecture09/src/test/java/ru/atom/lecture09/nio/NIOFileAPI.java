@@ -10,10 +10,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author Alpi
- * @since 13.11.16
- */
 public class NIOFileAPI {
     @Test
     public void writeFile() throws IOException {

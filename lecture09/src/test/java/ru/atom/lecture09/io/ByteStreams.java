@@ -6,10 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- * @author Alpi
- * @since 13.11.16
- */
 public class ByteStreams {
     @Test
     public void fileWrite() throws IOException {

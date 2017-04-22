@@ -1,15 +1,20 @@
 package ru.atom.lecture09.serialization_over_network;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ObjectServer {
+    private static final Logger log = LogManager.getLogger(ObjectServer.class);
+
     /**
      * This server accepts objects of type Packet
      * TODO: Implement client for this server and send Packet with YOUR_NAME_AND_SURNAME as payload to
-     * TODO: 0.0.0.0:12345
+     * TODO: wtfis.ru:12345
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         int portNum = 12345;
@@ -18,17 +23,14 @@ public class ObjectServer {
 
         //Run server forever
         while (true) {
-            try (
-                    //Block until mm established
-                    Socket clientSocket = listener.accept();
-                    //Open InputStream to read Objects from socket
-                    ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
+            try (Socket clientSocket = listener.accept();//Block until connection established
+                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())//Open InputStream to read Objects from socket
             ) {
-
                 //Block until object received
                 Packet inputData = (Packet) in.readObject();
-
-                System.out.println("[received] " + inputData);
+                log.info("[received] " + inputData);
+            } catch (Exception e) {
+                log.error(e);
             }
         }
     }

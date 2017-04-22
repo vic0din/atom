@@ -4,10 +4,6 @@ import org.junit.Test;
 
 import java.io.*;
 
-/**
- * @author Alpi
- * @since 13.11.16
- */
 public class CharacterStreams {
     @Test
     public void writeFile() throws IOException {
@@ -21,7 +17,7 @@ public class CharacterStreams {
     @Test
     public void readFile() throws IOException {
         try (InputStream in = new FileInputStream(new File("src/main/resources/to.txt"));
-             BufferedReader reader = new BufferedReader(new InputStreamReader(in))
+             BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"))
         ) {
             StringBuilder out = new StringBuilder();
             String line;

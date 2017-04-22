@@ -2,10 +2,6 @@ package ru.atom.lecture09.reflection;
 
 import com.sun.istack.internal.NotNull;
 
-/**
- * @author Alpi
- * @since 13.11.16
- */
 public class ClassWithPrivateFinalField {
     @NotNull
     private final String privateFinalField// = "This is my final state";

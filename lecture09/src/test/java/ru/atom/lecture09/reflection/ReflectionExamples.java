@@ -8,10 +8,6 @@ import java.util.Arrays;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-/**
- * @author Alpi
- * @since 13.11.16
- */
 public class ReflectionExamples {
   @Test
   public void introspection() {

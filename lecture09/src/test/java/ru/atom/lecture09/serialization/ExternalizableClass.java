@@ -4,33 +4,64 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-/**
- * @author Alpi
- * @since 13.11.16
- */
 public class ExternalizableClass implements Externalizable {
-  private String field = "true";
+    /**
+     * Suppose this list contains strings "true" and "false"
+     * We want to serialize this list efficiently
+     */
+    private List<String> strings = new ArrayList<>();
 
-  @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    out.write(new byte[]{1});
-  }
-
-  @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    int read = in.readByte();
-    if(read == 1){
-      this.field = "deserialized true";
-    } else {
-      this.field = "deserialized true";
+    public ExternalizableClass() {
     }
-  }
 
-  @Override
-  public String toString() {
-    return "ExternalizableClass{" +
-        "field='" + field + '\'' +
-        '}';
-  }
+    public ExternalizableClass(List<String> strings) {
+        this.strings = strings;
+    }
+
+    /**
+     * So instead of marking class as Serializable we mark it as Externalizable and implement
+     * writeExternal (custom serialization) and readExternal (custom deserialization)
+     */
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        byte[] dataToSerialize = new byte[strings.size() + 1];
+        int writeIndex = 0;
+        for (int i = 0; i < strings.size(); ++i) {
+            String s = strings.get(i);
+            if ("true".equals(s)) {
+                dataToSerialize[writeIndex++] = 1;
+            } else if ("false".equals(s)) {
+                dataToSerialize[writeIndex++] = 0;
+            }
+        }
+        dataToSerialize[writeIndex] = -1;
+        out.write(Arrays.copyOf(dataToSerialize, writeIndex));
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        while (true) {
+            int read = in.read();
+            if (read == 1) {
+                strings.add("true");
+            } else if (read == 0) {
+                strings.add("false");
+            } else if (read == -1) {
+                break;
+            } else {
+                strings.add("undefined");
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ExternalizableClass{" +
+                "strings='" + strings + '\'' +
+                '}';
+    }
 }
