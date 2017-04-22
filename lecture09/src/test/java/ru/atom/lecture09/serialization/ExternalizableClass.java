@@ -31,10 +31,10 @@ public class ExternalizableClass implements Externalizable {
         byte[] dataToSerialize = new byte[strings.size() + 1];
         int writeIndex = 0;
         for (int i = 0; i < strings.size(); ++i) {
-            String s = strings.get(i);
-            if ("true".equals(s)) {
+            String str = strings.get(i);
+            if ("true".equals(str)) {
                 dataToSerialize[writeIndex++] = 1;
-            } else if ("false".equals(s)) {
+            } else if ("false".equals(str)) {
                 dataToSerialize[writeIndex++] = 0;
             }
         }

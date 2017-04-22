@@ -1,4 +1,4 @@
-package ru.atom.lecture09.serialization_over_network;
+package ru.atom.lecture09.serialization;
 
 import java.io.Serializable;
 

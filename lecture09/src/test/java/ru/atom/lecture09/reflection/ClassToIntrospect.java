@@ -8,13 +8,12 @@ public class ClassToIntrospect<T> {
     private final String stringField = "stringField value";
     int intField = 42;
 
-    public void ClassToIntrospect() {
+    public ClassToIntrospect() {
     }
 
-    public void ClassToIntrospect(int intField) {
+    public ClassToIntrospect(int intField) {
         this.intField = intField;
     }
-
 
     private void privateMethod() {
     }

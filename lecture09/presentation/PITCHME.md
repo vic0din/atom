@@ -28,6 +28,7 @@ Refresh gradle project
 ## Agenda
 1. **[IO/NIO]**
 1. Serialization
+1. Reflection
 1. Collections revisited
 1. Exceptions revisited
 
@@ -87,6 +88,7 @@ For filesystem operations it is preferable to use java.io.Path
 ## Agenda
 1. IO/NIO
 1. **[Serialization]**
+1. Reflection
 1. Collections revisited
 1. Exceptions revisited
 
@@ -109,7 +111,7 @@ and to load persisted java object (**deserialize**) into java program
    ```
 1. put java object to ObjectOutputStream(OutputStream); that is we can immediately save it into File or send it via network e.t.c.
 1. Deserialize via ObjectInputStream(InputStream);
->@see serialization.SerializationDeserializationTest.java
+>@see src/ru.atom.lecture09.serialization.SerializationDeserializationTest.java
 
 #HSLIDE
 ## Serializable class example
@@ -148,9 +150,9 @@ public interface Externalizable {
 
 #HSLIDE
 #Task
-<img src="lecture08/presentation/assets/img/gameloop.png" alt="exception" style="width: 500px;"/>
+<img src="lecture08/presentation/assets/img/task.png" alt="exception" style="width: 500px;"/>
 
-> @see rua.atom.lecture09.serialization_over_network
+> @see src/ru.atom.lecture09.serialization
 
 Here we have server that accepts serialized object of type **Packet**  
 Implement ObjectClient and send packet with your name as **payload** to **wtfis.ru:12345**  
@@ -172,11 +174,53 @@ tcpdump - standard unix tool to for traffic analysis
 **wireshark**  
 [home page](https://www.wireshark.org/)
 
+#HSLIDE
+## Agenda
+1. IO/NIO
+1. Serialization
+1. Reflection
+1. Collections revisited
+1. Exceptions revisited
+
+#HSLIDE
+##Reflection
+Standard library API for accessing Type information at Runtime
+- **instanceof**  
+- class **Class<T>** (and all the class contents: fields, methods, Constructors ...)
+- class **ClassLoader**
+Official tutorial: [https://docs.oracle.com/javase/tutorial/reflect/](https://docs.oracle.com/javase/tutorial/reflect/)
+
+#HSLIDE
+##Why need reflection
+- Annotation processing (widely used inside frameworks)
+- Class loading at runtime
+- Introspection
+(for example for IDE or code generation toolchain)
+> @see test/ru.atom.lecture09.reflection
+
+#HSLIDE
+##Reflection drawback
+- performance overhead
+reflection is actually fast, but it breaks some optimizations https://shipilev.net/blog/archive/reflection/
+- security restrictions
+every reflective call goes through SecurityManager https://docs.oracle.com/javase/tutorial/essential/environment/security.html
+- exposure of internals reflection breaks abstraction
+**One must use reflection Wisely!**
+(actually as part of specific design patterns)
+
+#HSLIDE
+##Reflection example
+We can for example **configure application** by choosing interface interface implementation in parameters file
+>￼@see test/ru.atom.lecture09.reflection.configuration
+
+Actually **framework** has it's own harness for configuration (recall **hibernate.cfg.xml**).  
+It may actually work via reflection inside
 
 #HSLIDE
 ## Agenda
 1. IO/NIO
 1. Serialization
+1. Reflection
 1. **[Collections revisited]**
 1. Exceptions revisited
 
@@ -192,6 +236,7 @@ tcpdump - standard unix tool to for traffic analysis
 ## Agenda
 1. IO/NIO
 1. Serialization
+1. Reflection
 1. Collections revisited
 1. **[Exceptions revisited]**
 

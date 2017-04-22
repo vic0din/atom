@@ -29,9 +29,9 @@ public class ByteStreams {
         try (FileInputStream in = new FileInputStream("src/main/resources/from.txt");
              FileOutputStream out = new FileOutputStream("src/main/resources/to.txt");
         ) {
-            int c;
-            while ((c = in.read()) != -1) {
-                out.write(c);
+            int chunk;
+            while ((chunk = in.read()) != -1) {
+                out.write(chunk);
             }
         }
     }
