@@ -1,7 +1,10 @@
-package ru.atom.controller;
+package ru.atom;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.atom.model.GameSession;
+import ru.atom.websocket.message.Topic;
+import ru.atom.websocket.network.Broker;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
@@ -11,6 +14,7 @@ public class Ticker {
     private static final int FPS = 60;
     private static final long FRAME_TIME = 1000 / FPS;
     private long tickNumber = 0;
+    private GameSession gameSession;
 
     public void loop() {
         while (!Thread.currentThread().isInterrupted()) {
@@ -25,6 +29,8 @@ public class Ticker {
             }
             log.info("{}: tick ", tickNumber);
             tickNumber++;
+            // TODO: 28.04.17   надо проверить работу вот этой вот строчки
+            Broker.getInstance().broadcast(Topic.REPLICA, gameSession);
         }
     }
 
