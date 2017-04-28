@@ -79,7 +79,6 @@ Refresh gradle project
 - GameEngine - basic mechanics and render
 - Input engine - input handling 
 
-
 #HSLIDE
 ## Agenda
 1. Game architecture
