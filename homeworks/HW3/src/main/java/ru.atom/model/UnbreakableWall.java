@@ -11,7 +11,8 @@ public class UnbreakableWall extends AbstractGameObject {
     private static final Logger log = LogManager.getLogger(UnbreakableWall.class);
 
     public UnbreakableWall(int id, Point position) {
-        super(id, position.getX(),position.getY());
+        super(id, position);
+        type = "Wall";
         log.info("UnbreackableWall(id = {}) was created in ( {} ; {} )", id, position.getX(), position.getY());
     }
 }

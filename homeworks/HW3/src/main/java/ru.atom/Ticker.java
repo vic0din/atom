@@ -33,7 +33,7 @@ public class Ticker {
             log.info("{}: tick ", tickNumber);
             tickNumber++;
             // TODO: 28.04.17   надо проверить работу вот этой вот строчки
-            Broker.getInstance().broadcast(Topic.REPLICA, gameSession.getGameObjects());
+            Broker.getInstance().broadcast(Topic.REPLICA, gameSession);
         }
     }
 
@@ -50,5 +50,9 @@ public class Ticker {
 
     public void setGameSession(GameSession gameSession) {
         this.gameSession = gameSession;
+    }
+
+    public GameSession getGameSession() {
+        return gameSession;
     }
 }

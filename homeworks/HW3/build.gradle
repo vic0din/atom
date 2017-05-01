@@ -6,6 +6,7 @@ dependencies {
     compile rootProject.libraries.websocketclient
     compile rootProject.libraries.websocketserver
     compile rootProject.libraries.websocketapi
+    compile rootProject.libraries.gson
 }
 
 sourceSets {

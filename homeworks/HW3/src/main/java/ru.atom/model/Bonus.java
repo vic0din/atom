@@ -20,7 +20,8 @@ public class Bonus extends AbstractGameObject implements Temporary {
     }
 
     public Bonus(int id, Point position, Type bonusType) {
-        super(id, position.getX(),position.getY());
+        super(id, position);
+        type = "Bonus";
         dead = false;
         lifeTime = 5000;
         this.bonusType = bonusType;

@@ -1,5 +1,7 @@
 package ru.atom.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.atom.geometry.Point;
@@ -9,17 +11,21 @@ import ru.atom.geometry.Point;
  */
 public class AbstractGameObject implements Positionable {
     private static final Logger log = LogManager.getLogger(AbstractGameObject.class);
+    protected String type;
     private int id;
     protected Point position;
 
-    public AbstractGameObject(int id, int x, int y) {
-        if (x < 0 || y < 0) {
+
+    public AbstractGameObject(int id, Point point) {
+        if (point.getX() < 0 || point.getY() < 0) {
             log.error("Wrong coordinates of creating objects");
             throw new IllegalArgumentException();
         }
+        this.type = "abstractGameObject";
         this.id = id;
-        this.position = new Point(x,y);
-        log.info("{} was created with coordinates: ( {} ; {} )", AbstractGameObject.class.getName(), x, y);
+        this.position = point;
+        log.info("{} was created with coordinates: ( {} ; {} )",
+                AbstractGameObject.class.getName(), point.getX(), point.getY());
     }
 
     public void setPosition(Point position) {
@@ -34,5 +40,9 @@ public class AbstractGameObject implements Positionable {
     @Override
     public int getId() {
         return this.id;
+    }
+
+    public String getType() {
+        return type;
     }
 }
