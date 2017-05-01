@@ -3,6 +3,7 @@ package ru.atom;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.atom.model.GameSession;
+import ru.atom.websocket.message.Message;
 import ru.atom.websocket.message.Topic;
 import ru.atom.websocket.network.Broker;
 
@@ -15,10 +16,6 @@ public class Ticker {
     private static final long FRAME_TIME = 1000 / FPS;
     private long tickNumber = 0;
     private static Object lock = new Object();
-
-    public void setGameSession(GameSession gameSession) {
-        this.gameSession = gameSession;
-    }
 
     private GameSession gameSession;
 
@@ -49,5 +46,9 @@ public class Ticker {
 
     public long getTickNumber() {
         return tickNumber;
+    }
+
+    public void setGameSession(GameSession gameSession) {
+        this.gameSession = gameSession;
     }
 }

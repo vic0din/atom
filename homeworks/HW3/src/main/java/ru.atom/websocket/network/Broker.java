@@ -2,17 +2,23 @@ package ru.atom.websocket.network;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.util.BlockingArrayQueue;
 import org.eclipse.jetty.websocket.api.Session;
 import org.jetbrains.annotations.NotNull;
+import ru.atom.model.Player;
 import ru.atom.websocket.message.Message;
 import ru.atom.websocket.message.Topic;
 import ru.atom.websocket.util.JsonHelper;
+
+import java.util.concurrent.BlockingQueue;
 
 public class Broker {
     private static final Logger log = LogManager.getLogger(Broker.class);
 
     private static final Broker instance = new Broker();
     private final ConnectionPool connectionPool;
+
+    private BlockingQueue<Message> toDoForServer;
 
     public static Broker getInstance() {
         return instance;
@@ -21,6 +27,7 @@ public class Broker {
     // TODO: 28.04.17   тут где то не хватает добавления игроков в connectionPool.
     private Broker() {
         this.connectionPool = ConnectionPool.getInstance();
+        this.toDoForServer = new BlockingArrayQueue<>(5);
     }
 
     public void receive(@NotNull Session session, @NotNull String msg) {
@@ -29,7 +36,6 @@ public class Broker {
 
         if (message.getTopic() == Topic.PLANT_BOMB) {
             log.info("RECEIVED: topic {} with data {}", message.getTopic(), message.getData());
-            log.info("connectionPool player: {}", connectionPool.getPlayer(session));
         } else if (message.getTopic() == Topic.MOVE) {
             log.info("RECEIVED: topic {} with data {}", message.getTopic(), message.getData());
         }
@@ -48,4 +54,7 @@ public class Broker {
         connectionPool.broadcast(message);
     }
 
+    public BlockingQueue<Message> getToDoForServer() {
+        return toDoForServer;
+    }
 }

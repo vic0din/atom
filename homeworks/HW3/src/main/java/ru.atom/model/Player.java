@@ -53,6 +53,10 @@ public class Player extends AbstractGameObject implements Movable {
         return super.getPosition();
     }
 
+    public int getPowerBomb() {
+        return powerBomb;
+    }
+
     @Override
     public Point move(Direction direction) {
         if (direction == null) {

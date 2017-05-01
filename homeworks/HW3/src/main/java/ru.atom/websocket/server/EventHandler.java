@@ -2,6 +2,7 @@ package ru.atom.websocket.server;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+import ru.atom.websocket.message.Topic;
 import ru.atom.websocket.network.Broker;
 import ru.atom.websocket.network.ConnectionPool;
 
@@ -13,6 +14,7 @@ public class EventHandler extends WebSocketAdapter {
         //При установлении соединения добавляем новго пользователя
         //TODO где взять его имя?
         ConnectionPool.getInstance().add(sess, "Test User");
+        Broker.getInstance().send("Test User", Topic.POSSESS, 0);
     }
 
     @Override
