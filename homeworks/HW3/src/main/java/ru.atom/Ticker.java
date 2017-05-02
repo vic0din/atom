@@ -19,6 +19,10 @@ public class Ticker {
 
     private GameSession gameSession;
 
+    public Ticker() {
+        gameSession = new GameSession();
+    }
+
     public void loop() {
         while (!Thread.currentThread().isInterrupted()) {
             long started = System.currentTimeMillis();

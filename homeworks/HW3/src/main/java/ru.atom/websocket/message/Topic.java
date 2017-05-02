@@ -5,6 +5,7 @@ package ru.atom.websocket.message;
  */
 public enum Topic {
     HELLO,
+    BYE,
     MOVE,
     PLANT_BOMB,
     REPLICA,

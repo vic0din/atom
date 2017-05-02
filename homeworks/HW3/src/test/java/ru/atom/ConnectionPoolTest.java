@@ -28,6 +28,7 @@ public class ConnectionPoolTest {
     @Test
     public void SendingMessageForServer() {
         URI uri = URI.create("ws://localhost:8090/events/");
+        ConnectionPool connectionPool = new ConnectionPool();
 
         WebSocketClient client = new WebSocketClient();
         GameSession gameSession = new GameSession();
@@ -44,10 +45,10 @@ public class ConnectionPoolTest {
                 //TODO Разделить логику клиента и сервера
                 // Клиентская часть
                 // В игру заходит нужное количество человек
-                ConnectionPool.getInstance().add(session, "FirstPlayer");
-                ConnectionPool.getInstance().add(session, "SecondPlayer");
-                ConnectionPool.getInstance().add(session, "ThirdPlayer");
-                ConnectionPool.getInstance().add(session, "FourthPlayer");
+                connectionPool.add(session, "FirstPlayer");
+                connectionPool.add(session, "SecondPlayer");
+                connectionPool.add(session, "ThirdPlayer");
+                connectionPool.add(session, "FourthPlayer");
                 // В идеале, на этом этапе брокер получает команды от пользователей из фронтенда
                 Message msg = new Message(Topic.MOVE, JsonHelper.toJson(Movable.Direction.UP));
                 Broker.getInstance().send("FirstPlayer", msg.getTopic(), msg.getData());

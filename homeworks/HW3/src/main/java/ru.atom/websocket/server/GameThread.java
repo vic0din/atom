@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameThread implements Runnable {
     private static final Logger log = LogManager.getLogger(GameThread.class);
     private Ticker ticker = new Ticker();
-    private ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private ConnectionPool connectionPool = new ConnectionPool();
     private ConcurrentHashMap<Integer, String> playerPawn = new ConcurrentHashMap<>(4);
 
     public GameThread createMap() {
@@ -44,7 +44,7 @@ public class GameThread implements Runnable {
         GameSession gameSession = ticker.getGameSession();
         log.info("player with login {} has new pawn with id {}", login, gameSession.getCurrentId());
         playerPawn.put(gameSession.getCurrentId(), login);
-        connectionPool.add(session, gameSession.getCurrentId());
+        //connectionPool.add(session, gameSession.getCurrentId());
         Broker.getInstance().send(login, Topic.POSSESS, gameSession.getCurrentId());
         gameSession.addGameObject(new Player(gameSession.getCurrentId(), position));
         return this;

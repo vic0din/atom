@@ -11,16 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionPool {
     private static final Logger log = LogManager.getLogger(ConnectionPool.class);
-    private static final ConnectionPool instance = new ConnectionPool();
     private static final int PARALLELISM_LEVEL = 4;
 
     private final ConcurrentHashMap<Session, String> pool;
 
-    public static ConnectionPool getInstance() {
-        return instance;
-    }
-
-    private ConnectionPool() {
+    public ConnectionPool() {
         pool = new ConcurrentHashMap<>();
     }
 
@@ -65,5 +60,9 @@ public class ConnectionPool {
 
     public void remove(Session session) {
         pool.remove(session);
+    }
+
+    public int size() {
+        return pool.size();
     }
 }

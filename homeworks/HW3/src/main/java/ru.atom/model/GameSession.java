@@ -3,6 +3,7 @@ package ru.atom.model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.util.BlockingArrayQueue;
+import ru.atom.geometry.Point;
 import ru.atom.websocket.message.Message;
 
 import java.util.ArrayList;
@@ -14,11 +15,29 @@ import static ru.atom.model.Actions.*;
 
 public class GameSession implements Tickable {
     private static final Logger log = LogManager.getLogger(GameSession.class);
+    private static final Object lock = new Object();
     private List<GameObject> gameObjects = new ArrayList<>();
     //Очередь действий для определенных объектов
     //Важно! Смотри методы для BlockQueue! Лучше использовать offer(e), pool() и peek()
     private HashMap<Integer, BlockingArrayQueue<Actions>> actions = new HashMap<>();
     private int id = 0;
+
+    /**
+     * generation of standard map without pawns
+     */
+    public GameSession() {
+        for (int i = 0; i < 16; i++) {
+            addGameObject(new UnbreakableWall(getCurrentId(), new Point(i, 0)));
+            addGameObject(new UnbreakableWall(getCurrentId(), new Point(0, i)));
+            if (i!=0) {
+                addGameObject(new UnbreakableWall(getCurrentId(), new Point(15, i)));
+                if (i!=15) {
+                    addGameObject(new UnbreakableWall(getCurrentId(), new Point(i, 15)));
+                }
+            }
+        }
+        log.info("Map created");
+    }
 
     public int getCurrentId() {
         return id;
@@ -33,8 +52,10 @@ public class GameSession implements Tickable {
     }
 
     public void addGameObject(GameObject gameObject) {
-        gameObjects.add(gameObject);
-        id++;
+        synchronized (lock) {
+            gameObjects.add(gameObject);
+            id++;
+        }
     }
 
     @Override
@@ -43,6 +64,7 @@ public class GameSession implements Tickable {
         ArrayList<Temporary> dead = new ArrayList<>();
         ArrayList<Temporary> born = new ArrayList<>();
         //Проходимся по всем объектам игровой сессии
+        // TODO: 02.05.17   у Игрока тоже есть переменная тик. Лучше всю логику исполнения команд не выносить из объектов.
         for (GameObject gameObject : gameObjects) {
             //Если есть действия для текущего объекта, то выполняем их
             if (actions.containsKey(gameObject.getId())) {

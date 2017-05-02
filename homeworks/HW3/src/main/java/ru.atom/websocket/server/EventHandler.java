@@ -2,19 +2,20 @@ package ru.atom.websocket.server;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+import ru.atom.websocket.message.Message;
 import ru.atom.websocket.message.Topic;
 import ru.atom.websocket.network.Broker;
-import ru.atom.websocket.network.ConnectionPool;
+import ru.atom.websocket.util.JsonHelper;
+
+import java.util.Random;
 
 public class EventHandler extends WebSocketAdapter {
     @Override
     public void onWebSocketConnect(Session sess) {
         super.onWebSocketConnect(sess);
         System.out.println("Socket Connected: " + sess);
-        //При установлении соединения добавляем новго пользователя
-        //TODO где взять его имя?
-        ConnectionPool.getInstance().add(sess, "Test User");
-        Broker.getInstance().send("Test User", Topic.POSSESS, 0);
+        Broker.getInstance().receive(sess, JsonHelper.toJson(new Message(Topic.HELLO,
+                "Vlad" + new Random().nextInt())));
     }
 
     @Override
@@ -28,15 +29,12 @@ public class EventHandler extends WebSocketAdapter {
     public void onWebSocketClose(int statusCode, String reason) {
         super.onWebSocketClose(statusCode, reason);
         System.out.println("Socket Closed: [" + statusCode + "] " + reason);
-        //После закрытия убираем соединение из пулла
-        ConnectionPool.getInstance().remove(this.getSession());
+        Broker.getInstance().receive(super.getSession(), JsonHelper.toJson(new Message(Topic.BYE, "")));
     }
 
     @Override
     public void onWebSocketError(Throwable cause) {
         super.onWebSocketError(cause);
         cause.printStackTrace(System.err);
-        //TODO При возниконовении ошибки сбрасываю все соединения (Возможно излишне)
-        ConnectionPool.getInstance().shutdown();
     }
 }
