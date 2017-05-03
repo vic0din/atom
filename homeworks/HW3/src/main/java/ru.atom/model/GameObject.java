@@ -8,4 +8,15 @@ public interface GameObject {
      * Unique id
      */
     int getId();
+
+    /**
+     * Set some actions to object
+     * @param action
+     */
+    void setAction(Actions action);
+
+    /**
+     * Get some actions from object
+     */
+    Actions getAction();
 }

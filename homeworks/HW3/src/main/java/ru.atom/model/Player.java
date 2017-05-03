@@ -47,6 +47,22 @@ public class Player extends AbstractGameObject implements Movable {
     @Override
     public void tick(long elapsed) {
         elapsedTime += elapsed;
+        switch (getAction()) {
+            case MOVE_UP:
+                move(Movable.Direction.UP);
+                break;
+            case MOVE_DOWN:
+                move(Movable.Direction.DOWN);
+                break;
+            case MOVE_LEFT:
+                move(Movable.Direction.LEFT);
+                break;
+            case MOVE_RIGHT:
+                move(Movable.Direction.RIGHT);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -66,15 +82,19 @@ public class Player extends AbstractGameObject implements Movable {
         }
         switch (direction) {
             case UP:
-                return new Point(this.getPosition().getX(), this.getPosition().getY() + velocity);
+                position = new Point(this.getPosition().getX(), this.getPosition().getY() + velocity);
+                return position;
             case DOWN:
-                return new Point(this.getPosition().getX(), this.getPosition().getY() - velocity);
+                position = new Point(this.getPosition().getX(), this.getPosition().getY() - velocity);
+                return position;
             case IDLE:
                 return getPosition();
             case LEFT:
-                return new Point(this.getPosition().getX() - velocity, this.getPosition().getY());
+                position = new Point(this.getPosition().getX() - velocity, this.getPosition().getY());
+                return position;
             case RIGHT:
-                return new Point(this.getPosition().getX() + velocity, this.getPosition().getY());
+                position = new Point(this.getPosition().getX() + velocity, this.getPosition().getY());
+                return position;
             default:
                 return getPosition();
         }

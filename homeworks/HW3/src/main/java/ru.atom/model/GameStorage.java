@@ -8,16 +8,19 @@ import ru.atom.geometry.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.atom.WorkWithProperties.getProperties;
+
 /**
  * Created by BBPax on 02.05.17.
  */
 public class GameStorage {
     private static final Logger log = LogManager.getLogger(GameStorage.class);
-    private static final int PARALLELISM_LEVEL = 4;
+    private static final int PARALLELISM_LEVEL = Integer.valueOf(getProperties().getProperty("PARALLELISM_LEVEL"));
     private static final Point[] startpoint = {new Point(1, 1), new Point(1, 14),
             new Point(14, 14), new Point(14, 1)};
     private GameThread currentNewGameThread;
     private List<GameThread> games;
+    private static Object lock = new Object();
 
     public GameStorage() {
         this.currentNewGameThread = new GameThread();
@@ -25,15 +28,18 @@ public class GameStorage {
     }
 
     public int addPlayer(Session session, String login) {
-        int playerId = currentNewGameThread.addPawn(session, login, startpoint[currentNewGameThread.poolSize()]);
-        if (currentNewGameThread.poolSize() == PARALLELISM_LEVEL) {
-            log.info("game is ready to start");
-            currentNewGameThread.start();
-            // TODO: 02.05.17   надо будет еще реализовать старт после полной реализации общения с игровыми сессиями
-            games.add(currentNewGameThread);
-            currentNewGameThread = new GameThread();
+        // Если не синхронизировать, можно получить игроков с одинаковым ид
+        synchronized (lock) {
+            int playerId = currentNewGameThread.addPawn(session, login, startpoint[currentNewGameThread.poolSize()]);
+            if (currentNewGameThread.poolSize() == PARALLELISM_LEVEL) {
+                log.info("game is ready to start");
+                currentNewGameThread.start();
+                // TODO: 02.05.17   надо будет еще реализовать старт после полной реализации общения с игровыми сессиями
+                games.add(currentNewGameThread);
+                //currentNewGameThread = new GameThread();
+            }
+            return playerId;
         }
-        return playerId;
     }
 
     public void plantBomb(Session session) {

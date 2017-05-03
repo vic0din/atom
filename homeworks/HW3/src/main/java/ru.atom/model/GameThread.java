@@ -2,6 +2,7 @@ package ru.atom.model;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.util.BlockingArrayQueue;
 import org.eclipse.jetty.websocket.api.Session;
 import ru.atom.Ticker;
 import ru.atom.geometry.Point;
@@ -10,14 +11,17 @@ import ru.atom.websocket.network.ConnectionPool;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import static ru.atom.WorkWithProperties.getProperties;
+
 /**
  * Created by BBPax on 02.05.17.
  */
 public class GameThread extends Thread {
     private static final Logger log = LogManager.getLogger(GameThread.class);
+    public static final int MAX_CAPACITY_FOR_ACTIONS = Integer.valueOf(getProperties().getProperty("MAX_CAPACITY_FOR_ACTIONS"));
     Ticker ticker;
     ConnectionPool connectionPool;
-    private ConcurrentHashMap<String, Integer> playerPawn = new ConcurrentHashMap<>(4);
+    private ConcurrentHashMap<String, Integer> playerPawn = new ConcurrentHashMap<>(Integer.valueOf(getProperties().getProperty("PARALLELISM_LEVEL")));
 
     public GameThread() {
         ticker = new Ticker();
@@ -49,6 +53,7 @@ public class GameThread extends Thread {
         log.info("Bomb has been planted by {} in point: ({};{})",
                 connectionPool.getPlayer(session), player.getPosition().getX(), player.getPosition().getY());
         // TODO: 02.05.17   надо добавить взаимодействие с GameSession
+        crateActionForObject(playerId, Actions.PLANT_BOMB);
     }
 
     public void move(Session session, Movable.Direction direction) {
@@ -57,6 +62,23 @@ public class GameThread extends Thread {
         log.info("Player {} should be moved in direction {}",
                 connectionPool.getPlayer(session), direction);
         // TODO: 02.05.17   надо добавить взаимодействие с GameSession
+        switch (direction) {
+            case UP:
+                crateActionForObject(playerId, Actions.MOVE_UP);
+                break;
+            case DOWN:
+                crateActionForObject(playerId, Actions.MOVE_DOWN);
+                break;
+            case LEFT:
+                crateActionForObject(playerId, Actions.MOVE_LEFT);
+                break;
+            case RIGHT:
+                crateActionForObject(playerId, Actions.MOVE_RIGHT);
+                break;
+            case IDLE:
+                crateActionForObject(playerId, Actions.IDLE);
+                break;
+        }
     }
     /**
      * When an object implementing interface <code>Runnable</code> is used
@@ -73,5 +95,15 @@ public class GameThread extends Thread {
     public void run() {
         log.info("The Game begins!");
         ticker.loop();
+    }
+
+    private void crateActionForObject(Integer id, Actions action){
+        if (ticker.getGameSession().getActions().containsKey(id)) {
+            ticker.getGameSession().getActions().get(id).offer(action);
+        } else {
+            BlockingArrayQueue<Actions> newActions = new BlockingArrayQueue<>(MAX_CAPACITY_FOR_ACTIONS);
+            newActions.offer(action);
+            ticker.getGameSession().getActions().put(id, newActions);
+        }
     }
 }
