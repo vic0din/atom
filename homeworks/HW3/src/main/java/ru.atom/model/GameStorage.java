@@ -28,6 +28,7 @@ public class GameStorage {
         int playerId = currentNewGameThread.addPawn(session, login, startpoint[currentNewGameThread.poolSize()]);
         if (currentNewGameThread.poolSize() == PARALLELISM_LEVEL) {
             log.info("game is ready to start");
+            currentNewGameThread.start();
             // TODO: 02.05.17   надо будет еще реализовать старт после полной реализации общения с игровыми сессиями
             games.add(currentNewGameThread);
             currentNewGameThread = new GameThread();
@@ -41,6 +42,11 @@ public class GameStorage {
 
     public void move(Session session, Movable.Direction direction) {
         findBySession(session).move(session, direction);
+    }
+
+    public void gameFailed(Session session) {
+        findBySession(session).stop();
+        log.info("Game with this user was falled: {}", games.remove(findBySession(session)));
     }
 
     private GameThread findBySession (Session session) {

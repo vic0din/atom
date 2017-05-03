@@ -62,7 +62,7 @@ public class ConnectionPoolTest {
                 // Просиходит тик в модели
                 gameSession.tick(1000L);
                 // Отправка изменений клиентам
-                Broker.getInstance().broadcast(Topic.MOVE, gameSession.getGameObjects());
+                //Broker.getInstance().broadcast(Topic.MOVE, gameSession.getGameObjects());
 
             } finally {
                 client.stop();

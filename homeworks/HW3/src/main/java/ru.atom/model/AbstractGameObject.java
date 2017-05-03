@@ -1,7 +1,5 @@
 package ru.atom.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.atom.geometry.Point;
@@ -14,7 +12,6 @@ public class AbstractGameObject implements Positionable {
     protected String type;
     private int id;
     protected Point position;
-
 
     public AbstractGameObject(int id, Point point) {
         if (point.getX() < 0 || point.getY() < 0) {

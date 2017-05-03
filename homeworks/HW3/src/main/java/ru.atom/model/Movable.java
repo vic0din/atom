@@ -15,6 +15,7 @@ public interface Movable extends Positionable, Tickable {
     Point move(Direction direction);
 
     enum Direction {
+
         UP,
         DOWN,
         RIGHT,
@@ -22,8 +23,9 @@ public interface Movable extends Positionable, Tickable {
         IDLE;
 
         @JsonCreator
-        public static Direction forValue(String value) {
-            // TODO: 02.05.17   JsonHelper.toJson(Movable.Direction.DOWN) gave us "MOVE" !!!!!!
+        public static Direction forValue(@JsonProperty("direction") String value) {
+            // TODO: 02.05.17   JsonHelper.toJson(Movable.Direction.DOWN) gave us "DOWN" !!!!!!
+            System.out.println(value);
             if (value.equals("{\"direction\":\"UP\"}")) {
                 return UP;
             } else if (value.equals("{\"direction\":\"DOWN\"}")) {

@@ -13,10 +13,10 @@ import java.util.concurrent.locks.LockSupport;
 public class Ticker {
     private static final Logger log = LogManager.getLogger(Ticker.class);
     private static final int FPS = 60;
-    private static final long FRAME_TIME = 1000 / FPS;
+    // TODO: 03.05.17   time of tick was increased to see all changes
+    private static final long FRAME_TIME = 100000 / FPS;
     private long tickNumber = 0;
     private static Object lock = new Object();
-
     private GameSession gameSession;
 
     public Ticker() {
@@ -37,7 +37,7 @@ public class Ticker {
             log.info("{}: tick ", tickNumber);
             tickNumber++;
             // TODO: 28.04.17   надо проверить работу вот этой вот строчки
-            Broker.getInstance().broadcast(Topic.REPLICA, gameSession);
+            Broker.getInstance().broadcast(Topic.REPLICA, gameSession.getGameObjects());
         }
     }
 
