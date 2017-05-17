@@ -228,7 +228,8 @@ public class GameSession implements Tickable {
                 Fire fire = (Fire) gameObject;
                 try {
                     GameObject destruction = gameObjects.stream().filter(gameObject1 ->
-                            fire.getBar().isColliding(((AbstractGameObject) gameObject1).getBar())).findFirst().get();
+                            fire.getBar().isColliding(((AbstractGameObject) gameObject1).getBar())
+                                    && !(gameObject1 instanceof Grass)).findFirst().get();
                     if (destruction instanceof Wall) {
                         log.info("I destroyed Wood {}", JsonHelper.toJson(destruction));
                         dead.add(destruction);
