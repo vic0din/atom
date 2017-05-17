@@ -128,6 +128,7 @@ public class Ticker extends Thread {
      * collection commands to Pawns
      * and reply REPLICA to Broker
      */
+
     private static final int TICKER_PARALLELISM_LEVEL = Integer.valueOf(getProperties().getProperty("TICKER_PARALLELISM_LEVEL"));
     private ConcurrentHashMap<Session, String> localPool = new ConcurrentHashMap<>(); //связь session<->login
     private ConcurrentHashMap<String, Integer> playerPawn = new ConcurrentHashMap<>(TICKER_PARALLELISM_LEVEL); //idPawn<->login

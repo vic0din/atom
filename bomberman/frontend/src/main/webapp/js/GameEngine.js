@@ -191,7 +191,6 @@ GameEngine = Class.extend({
                 }
             }
         });
-
     }
 
 });

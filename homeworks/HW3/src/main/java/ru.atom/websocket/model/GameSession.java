@@ -77,29 +77,86 @@ public class GameSession implements Tickable {
         }
     }
 
+    private GameObject findByPoint(Point point) {
+        try {
+            return gameObjects.stream().filter(gameObject1 ->
+                    (((AbstractGameObject) gameObject1).getPosition().equals(point))).findAny().get();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
     private List<Fire> explosionBomb(Bomb bomb) {
         List<Fire> explosion = new ArrayList<>();
         Point bombPosition = bomb.getPosition();
         explosion.add(new Fire(id.getAndIncrement(), bombPosition));
+        Point point = new Point(bombPosition.getX() / 32,bombPosition.getY() / 32);
+        boolean up = true;
+        boolean down = true;
+        boolean left = true;
+        boolean right = true;
+        GameObject object;
         // TODO: 11.05.17   надо тут исправить, когда будут коллизии с досками и стенами
-        if ((bombPosition.getX() / BAR_SIZE) % 2 != 0) {
-            for (int i = 0; i < bomb.getPower(); i++) {
-                if (bombPosition.getY() + BAR_SIZE * (i + 1) < MAP_HEIGHT*BAR_SIZE)
-                explosion.add(new Fire(id.getAndIncrement(),
-                        new Point(bombPosition.getX(), bombPosition.getY() + BAR_SIZE * (i + 1))));
-                if (bombPosition.getY() - BAR_SIZE * (i + 1) > 0*BAR_SIZE)
-                explosion.add(new Fire(id.getAndIncrement(),
-                        new Point(bombPosition.getX(), bombPosition.getY() - BAR_SIZE * (i + 1))));
+        for (int i = 0; i < bomb.getPower(); i++) {
+            if (up) {
+                object = findByPoint(new Point(point.getX(), point.getY() + 1));
+                if (object == null) {
+                    up = false;
+                } else if (object instanceof UnbreakableWall) {
+                    up = false;
+                } else if (object instanceof Wall) {
+                    explosion.add(new Fire(id.getAndIncrement(),
+                            new Point(bombPosition.getX(), bombPosition.getY() + BAR_SIZE * (i + 1))));
+                    up = false;
+                } else {
+                    explosion.add(new Fire(id.getAndIncrement(),
+                            new Point(bombPosition.getX(), bombPosition.getY() + BAR_SIZE * (i + 1))));
+                }
             }
-        }
-        if ((bombPosition.getY() / BAR_SIZE) % 2 != 0) {
-            for (int i = 0; i < bomb.getPower(); i++) {
-                if (bombPosition.getX() + BAR_SIZE * (i + 1) < MAP_WIDTH*BAR_SIZE)
-                explosion.add(new Fire(id.getAndIncrement(),
-                        new Point(bombPosition.getX() + BAR_SIZE * (i + 1), bombPosition.getY())));
-                if (bombPosition.getX() - BAR_SIZE * (i + 1) > 0 *BAR_SIZE)
-                explosion.add(new Fire(id.getAndIncrement(),
-                        new Point(bombPosition.getX() - BAR_SIZE * (i + 1), bombPosition.getY())));
+            if (down) {
+                object = findByPoint(new Point(point.getX(), point.getY() - 1));
+                if (object == null) {
+                    down = false;
+                } else if (object instanceof UnbreakableWall) {
+                    down = false;
+                } else if (object instanceof Wall) {
+                    explosion.add(new Fire(id.getAndIncrement(),
+                            new Point(bombPosition.getX(), bombPosition.getY() - BAR_SIZE * (i + 1))));
+                    down = false;
+                } else {
+                    explosion.add(new Fire(id.getAndIncrement(),
+                            new Point(bombPosition.getX(), bombPosition.getY() - BAR_SIZE * (i + 1))));
+                }
+            }
+            if (left) {
+                object = findByPoint(new Point(point.getX() - 1, point.getY()));
+                if (object == null) {
+                    left = false;
+                } else if (object instanceof UnbreakableWall) {
+                    left = false;
+                } else if (object instanceof Wall) {
+                    explosion.add(new Fire(id.getAndIncrement(),
+                            new Point(bombPosition.getX() - BAR_SIZE * (i + 1), bombPosition.getY())));
+                    left = false;
+                } else {
+                    explosion.add(new Fire(id.getAndIncrement(),
+                            new Point(bombPosition.getX() - BAR_SIZE * (i + 1), bombPosition.getY())));
+                }
+            }
+            if (right) {
+                object = findByPoint(new Point(point.getX() + 1, point.getY()));
+                if (object == null) {
+                    right = false;
+                } else if (object instanceof UnbreakableWall) {
+                    right = false;
+                } else if (object instanceof Wall) {
+                    explosion.add(new Fire(id.getAndIncrement(),
+                            new Point(bombPosition.getX() + BAR_SIZE * (i + 1), bombPosition.getY())));
+                    right = false;
+                } else {
+                    explosion.add(new Fire(id.getAndIncrement(),
+                            new Point(bombPosition.getX() + BAR_SIZE * (i + 1), bombPosition.getY())));
+                }
             }
         }
         return explosion;
@@ -171,14 +228,11 @@ public class GameSession implements Tickable {
                 Fire fire = (Fire) gameObject;
                 try {
                     GameObject destruction = gameObjects.stream().filter(gameObject1 ->
-                            fire.getBar().isColliding(((AbstractGameObject) gameObject1).getBar())
-                                    && !(gameObject1 instanceof Grass)).findFirst().get();
-                    if (destruction instanceof UnbreakableWall) {
-                        log.info("I was blocked by Wall {}", JsonHelper.toJson(destruction));
-                        dead.add(gameObject);
-                    } else if (destruction instanceof Wall) {
+                            fire.getBar().isColliding(((AbstractGameObject) gameObject1).getBar())).findFirst().get();
+                    if (destruction instanceof Wall) {
                         log.info("I destroyed Wood {}", JsonHelper.toJson(destruction));
                         dead.add(destruction);
+                        addGameObject(new Grass(getCurrentId(), ((Wall) destruction).getPosition()));
                         Bonus bonus = ((Wall) destruction).plantBonus();
                         if (bonus != null) {
                             bonus.setId(id.getAndIncrement());

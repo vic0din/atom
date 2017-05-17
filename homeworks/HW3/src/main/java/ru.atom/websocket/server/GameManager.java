@@ -21,6 +21,7 @@ public class GameManager {
     private static final int GAME_MAN_PARALLELISM_LEVEL =
             Integer.valueOf(getProperties().getProperty("GAME_MAN_PARALLELISM_LEVEL"));  // TODO: 06.05.17   MAX_PLAYERS
 
+
     private final ConcurrentLinkedQueue<Ticker> games;
     private Ticker currentGame;
     private AtomicInteger currentGameId = new AtomicInteger(0);
